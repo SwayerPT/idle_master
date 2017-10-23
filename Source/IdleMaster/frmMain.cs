@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -106,10 +106,10 @@ namespace IdleMaster
         {
             foreach (var badge in CanIdleBadges.Where(b => !Equals(b, CurrentBadge)))
             {
-                if (badge.HoursPlayed >= 2 && badge.InIdle)
+                if (badge.HoursPlayed >= 3 && badge.InIdle)
                     badge.StopIdle();
 
-                if (badge.HoursPlayed < 2 && CanIdleBadges.Count(b => b.InIdle) < 30)
+                if (badge.HoursPlayed < 3 && CanIdleBadges.Count(b => b.InIdle) < 30)
                     badge.Idle();
             }
 
@@ -211,8 +211,8 @@ namespace IdleMaster
                     {
                         if (Settings.Default.OneThenMany)
                         {
-                            var multi = CanIdleBadges.Where(b => b.HoursPlayed >= 2);
-                            if (multi.Count() >= 1)
+                            var multi = CanIdleBadges.Where(b => b.HoursPlayed >= 3);
+                            if (multi.Count() >= 3)
                             {
                                 StartSoloIdle(multi.First());
                             }
@@ -223,8 +223,8 @@ namespace IdleMaster
                         }
                         else
                         {
-                            var multi = CanIdleBadges.Where(b => b.HoursPlayed < 2);
-                            if (multi.Count() >= 2)
+                            var multi = CanIdleBadges.Where(b => b.HoursPlayed < 3);
+                            if (multi.Count() >= 3)
                             {
                                 StartMultipleIdle();
                             }
@@ -861,7 +861,7 @@ namespace IdleMaster
                     await LoadBadgesAsync();
                     UpdateIdleProcesses();
 
-                    isMultipleIdle = CanIdleBadges.Any(b => b.HoursPlayed < 2 && b.InIdle);
+                    isMultipleIdle = CanIdleBadges.Any(b => b.HoursPlayed < 3 && b.InIdle);
                     if (isMultipleIdle)
                         TimeLeft = 360;
                 }
